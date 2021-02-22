@@ -5,24 +5,24 @@ LABEL maintainer="Christian Wustrau <christian.wustrau@ovgu.de>"
 
 USER root
 
-# install additional package...
-RUN pip install --no-cache-dir numpy \
-	matplotlib \
-	scipy \
-	seaborn \
-	pandas \
-	deap \
-	scikit-learn \
-	ffmpeg \
-	openpyxl \
-	Pillow \
-	nose \
-	sympy
-	
-RUN pip install --no-cache-dir torch==1.7.1+cpu \
-	torchvision==0.8.2+cpu \
-	torchaudio==0.7.2 -f \
-	https://download.pytorch.org/whl/torch_stable.html
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+  software-properties-common \
+  curl
+
+# Install Zulu OpenJdk 11 (LTS)
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 \
+  && apt-add-repository 'deb http://repos.azulsystems.com/ubuntu stable main' \
+  && apt install -y zulu-11
+  
+# Unpack and install the kernel
+RUN curl -L https://github.com/SpencerPark/IJava/releases/download/v1.3.0/ijava-1.3.0.zip > ijava-kernel.zip
+RUN unzip ijava-kernel.zip -d ijava-kernel \
+  && cd ijava-kernel \
+  && python3 install.py --sys-prefix
+  
+# Cleanup
+RUN rm ijava-kernel.zip
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
