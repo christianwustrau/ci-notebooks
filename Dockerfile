@@ -6,10 +6,11 @@ USER root
 
 # Install IRuby
 RUN apt-get update
-RUN apt-get install -y build-essential ruby ruby-dev libzmq3 libzmq3-dev gnuplot-nox libgsl0-dev libtool autoconf automake zlib1g-dev libsqlite3-dev libmagick++-dev imagemagick libatlas-base-dev && apt-get clean
-RUN ln -s /usr/bin/libtoolize /usr/bin/libtool # See https://github.com/zeromq/libzmq/issues/1385
+RUN apt-get install -y libtool libffi-dev ruby ruby-dev make
+RUN apt-get install -y libzmq3-dev libczmq-dev
 
-RUN gem update --no-document --system && gem install --no-document sciruby-full
+RUN gem install ffi-rzmq
+RUN gem install iruby --pre
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
