@@ -15,6 +15,6 @@ RUN gem install iruby --pre
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-RUN iruby register
-
 WORKDIR $HOME
+
+RUN iruby register
