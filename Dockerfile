@@ -17,4 +17,4 @@ USER $NB_UID
 
 WORKDIR $HOME
 
-RUN iruby register
+RUN iruby register --force
